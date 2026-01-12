@@ -2,13 +2,19 @@
 
 ## 🍌 什么是 Nano Banana？
 
-Nano Banana 是一个提供 Gemini 2.0 Flash 图像生成能力的 API 服务。
+Nano Banana 是一个 Gemini 图片生成 API 的中转站服务。
+
+基于 Gemini 2.5 Flash Image 和 Gemini 3 Pro Image。
+
+**完整 API 文档**: 查看 [NANO_BANANA_API.md](./NANO_BANANA_API.md)
 
 ## 🔑 获取 Token
 
-1. 访问 Nano Banana 官网
+1. 访问中转站服务提供商
 2. 注册/登录账号
-3. 获取你的 API Token
+3. 获取你的 API Key
+
+**API 端点**: `https://cdn.12ai.org/v1beta/models/{model}:generateContent`
 
 ## ⚙️ 配置方法
 
@@ -65,20 +71,26 @@ $env:NANO_BANANA_TOKEN="your_token_here"
 echo $NANO_BANANA_TOKEN
 ```
 
-应该显示你的 Token。
+应该显示你的 API Key。
 
 ### 测试 API 调用
 
 ```bash
-curl -X POST https://api.nanobanana.ai/v1/images/generations \
-  -H "Authorization: Bearer $NANO_BANANA_TOKEN" \
+curl -s -X POST \
+  "https://cdn.12ai.org/v1beta/models/gemini-2.5-flash-image:generateContent?key=$NANO_BANANA_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gemini-2.0-flash-exp",
-    "prompt": "A minimalist illustration of a cat",
-    "n": 1,
-    "size": "1024x1024",
-    "response_format": "b64_json"
+    "contents": [{
+      "parts": [{
+        "text": "A minimalist illustration of a cat"
+      }]
+    }],
+    "generationConfig": {
+      "responseModalities": ["IMAGE"],
+      "imageConfig": {
+        "aspectRatio": "1:1"
+      }
+    }
   }'
 ```
 
@@ -88,25 +100,36 @@ curl -X POST https://api.nanobanana.ai/v1/images/generations \
 
 ### 支持的模型
 
-- `gemini-2.0-flash-exp` - Gemini 2.0 Flash 实验版
-- 其他模型请查看官方文档
+- `gemini-2.5-flash-image` - Nano Banana（快速高效）
+- `gemini-3-pro-image-preview` - Nano Banana Pro（专业素材，支持 4K）
 
-### 图片尺寸
+### 宽高比选项
 
-- `1024x1024` - 正方形（推荐）
-- `1024x1792` - 竖版
-- `1792x1024` - 横版
+- `1:1` - 正方形（1024x1024）
+- `16:9` - 横版（1344x768）
+- `9:16` - 竖版（768x1344）
+- `4:3`, `3:4`, `3:2`, `2:3` 等
+
+### 图片尺寸（仅 Pro）
+
+- `1K` - 标准分辨率
+- `2K` - 高分辨率
+- `4K` - 超高分辨率
 
 ### 响应格式
 
-- `b64_json` - Base64 编码（推荐，本项目使用）
-- `url` - 图片 URL
+- `["IMAGE"]` - 仅返回图片
+- `["TEXT", "IMAGE"]` - 返回文本和图片（默认）
+
+**详细参数说明**: 查看 [NANO_BANANA_API.md](./NANO_BANANA_API.md)
 
 ## 💰 费用说明
 
-- 请查看 Nano Banana 官网的定价信息
+- 请查看中转站服务提供商的定价信息
 - 建议设置使用限额
-- 每次生成约消耗 X tokens（具体以官方为准）
+- 每次生成约消耗 1290 tokens（标准分辨率）
+
+**详细令牌消耗**: 查看 [NANO_BANANA_API.md](./NANO_BANANA_API.md#分辨率和令牌数)
 
 ## 🔧 在本项目中使用
 
@@ -197,9 +220,9 @@ Style requirements:
 
 ## 🔗 相关链接
 
-- Nano Banana 官网: [待补充]
-- API 文档: [待补充]
-- 定价信息: [待补充]
+- API 端点: `https://cdn.12ai.org/v1beta/models/{model}:generateContent`
+- 完整 API 文档: [NANO_BANANA_API.md](./NANO_BANANA_API.md)
+- 官方文档: [Gemini Image Generation](https://ai.google.dev/gemini-api/docs/image-generation)
 
 ## 💡 提示
 
