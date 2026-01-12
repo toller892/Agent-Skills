@@ -216,12 +216,26 @@ TL;DR（太长不看版）：
 
 ## 工作流
 
-### 1/ 抓信息 🔍
+### 1/ 读取文件 �
 
+用户提供本地文件路径，直接读取内容。
+
+支持格式：
+- `.md` - Markdown 文件
+- `.pdf` - PDF 文档
+- `.txt` - 纯文本文件
+- `.doc` / `.docx` - Word 文档
+
+读取方式：
 ```
-WebFetch: 抓 arXiv 摘要页
-WebSearch: 搜索论文解读、作者访谈
-WebFetch: 获取技术博客深度分析
+readFile: 读取用户指定的本地文件路径
+```
+
+示例输入：
+```
+"把这个文件变成推文串：D:/papers/attention.pdf"
+"解读这篇：./research/gpt4-report.md"
+"推特风格解读：~/Documents/论文.docx"
 ```
 
 ### 2/ 提炼要点 📝
@@ -307,30 +321,149 @@ API: Nano Banana (Gemini 2.5 Flash)
 
 直接说：
 
-"把这篇论文变成推文串：https://arxiv.org/abs/2301.12345"
+"把这个文件变成推文串：D:/papers/attention.pdf"
 
 或者
 
-"用推特风格解读这篇论文"
+"推特风格解读这个：./research/report.md"
 
 或者
 
-"帮我写个 thread 解释这篇 paper"
+"帮我写个 thread：~/Documents/论文.docx"
+
+支持格式：md、pdf、txt、doc/docx
 
 ---
 
 ## 输出文件
 
 ```
-论文解读/
-├── {论文名}/
+输出目录/
+├── {文件名}/
 │   ├── thread.md          # 推文串正文
+│   ├── thread.html        # 图文并茂版（截图用）
 │   ├── thread_images/     # 配图
 │   │   ├── 01_hook.png
 │   │   ├── 03_diagram.png
 │   │   └── ...
-│   └── metadata.json      # 论文元信息
+│   └── metadata.json      # 源文件元信息
 ```
+
+---
+
+## HTML 输出规范
+
+`thread.html` 专为截图发推设计。
+
+### 设计要求
+
+**尺寸适配**
+- 宽度固定 600px（推特图片最佳宽度）
+- 每条推文独立卡片
+- 卡片间距 20px
+
+**视觉风格**
+- 深色模式（#15202B 背景，推特同款）
+- 白色文字 #E7E9EA
+- 圆角卡片 16px
+- 头像 + 用户名模拟真实推文
+
+**字体**
+- 系统字体栈：-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto
+- 正文 15px
+- 行高 1.5
+
+**配图嵌入**
+- 图片直接嵌入卡片内
+- 圆角 12px
+- 最大宽度 100%
+
+### HTML 结构示例
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      background: #15202B;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .tweet {
+      background: #192734;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 20px;
+      color: #E7E9EA;
+    }
+    .tweet-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #1DA1F2;
+      margin-right: 12px;
+    }
+    .username {
+      font-weight: bold;
+    }
+    .handle {
+      color: #8899A6;
+    }
+    .tweet-content {
+      font-size: 15px;
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+    .tweet-image {
+      margin-top: 12px;
+      border-radius: 12px;
+      max-width: 100%;
+    }
+    .thread-line {
+      width: 2px;
+      height: 20px;
+      background: #38444D;
+      margin-left: 23px;
+    }
+  </style>
+</head>
+<body>
+  <div class="tweet">
+    <div class="tweet-header">
+      <div class="avatar"></div>
+      <div>
+        <div class="username">Your Name</div>
+        <div class="handle">@yourhandle · 1/12</div>
+      </div>
+    </div>
+    <div class="tweet-content">推文内容在这里
+
+支持换行显示</div>
+    <img class="tweet-image" src="thread_images/01_hook.png">
+  </div>
+  <div class="thread-line"></div>
+  <!-- 更多推文卡片 -->
+</body>
+</html>
+```
+
+### 截图指南
+
+1. 浏览器打开 `thread.html`
+2. 使用浏览器截图或截图工具
+3. 每 2-3 条推文截一张图
+4. 发推时作为图片附件上传
+
+**推荐截图尺寸**：600 x 800px（单张含 2-3 条推文）
 
 ---
 
