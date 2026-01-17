@@ -104,7 +104,9 @@
   if date == none { return "N/A" }
   
   if format == "zh" {
-    str(date.year()) + "年" + str(date.month()) + "月" + str(date.day()) + "日"
+    str(date.year()) + "年" + 
+    str(date.month()) + "月" + 
+    str(date.day()) + "日"
   } else if format == "iso" {
     date.display("[year]-[month]-[day]")
   } else {
@@ -118,7 +120,9 @@
   if date == none { return "N/A" }
   
   if format == "zh" {
-    format-date(date, format: "zh") + " " + str(date.hour()).pad(2, with: "0") + ":" + str(date.minute()).pad(2, with: "0")
+    format-date(date, format: "zh") + " " +
+    str(date.hour()).pad(2, with: "0") + ":" +
+    str(date.minute()).pad(2, with: "0")
   } else {
     date.display("[year]-[month]-[day] [hour]:[minute]")
   }
