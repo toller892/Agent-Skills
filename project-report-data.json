@@ -1,0 +1,106 @@
+{
+  "title": "Agent Skills 项目分析报告",
+  "subtitle": "OpenCode Agent Skills 集合项目分析",
+  "author": "OpenCode Agent",
+  "date": "2026-01-17",
+  "summary": "本报告分析了 Agent Skills 项目的结构、功能模块和技术实现。该项目是一个 OpenCode Agent Skills 集合，包含可复用的 AI 能力模块，目前主要包含 typst-report 和 paper-interpreter 两个核心技能。",
+  "metrics": [
+    {"label": "项目技能数", "value": "2", "change": 0.0},
+    {"label": "代码文件数", "value": "8", "change": 0.0},
+    {"label": "文档文件数", "value": "15", "change": 0.0},
+    {"label": "项目大小", "value": "13.2 MB", "change": 0.0}
+  ],
+  "sections": [
+    {
+      "heading": "项目概述",
+      "level": 2,
+      "type": "text",
+      "content": "Agent Skills 是一个 OpenCode Agent Skills 集合项目，旨在提供可复用的 AI 能力模块。项目采用模块化设计，每个技能都有完整的文档和使用说明。"
+    },
+    {
+      "heading": "核心技能分析",
+      "level": 2,
+      "type": "text",
+      "content": "项目目前包含两个主要技能：\n\n1. **typst-report** - 使用 Typst 排版系统生成专业 PDF 报告\n   - 支持从 JSON/CSV 数据生成报告\n   - 内置图表组件（折线图、柱状图）\n   - 支持中文排版\n   - 自动生成封面、目录、页码\n\n2. **paper-interpreter** - 论文解析器技能\n   - 解析学术论文内容\n   - 提取关键信息\n   - 生成结构化摘要"
+    },
+    {
+      "heading": "项目结构",
+      "level": 2,
+      "type": "text",
+      "content": "项目采用标准化的目录结构：\n\n- **typst-report/** - Typst 报告生成技能\n  - SKILL.md - 技能定义文件\n  - README.md - 使用说明\n  - typst-templates/ - Typst 模板文件\n\n- **paper-interpreter/** - 论文解析器技能\n  - scripts/ - Python 脚本\n  - references/ - 参考文档\n  - assets/ - 资源文件\n\n- **.github/** - GitHub Actions 配置\n- **opencode.json** - OpenCode 配置文件"
+    },
+    {
+      "heading": "技术栈分析",
+      "level": 2,
+      "type": "text",
+      "content": "项目采用以下技术栈：\n\n- **Typst** - 现代化的标记型排版系统\n- **Python** - 脚本语言，用于数据处理\n- **JSON/CSV** - 数据交换格式\n- **GitHub Actions** - 自动化工作流\n- **OpenCode** - AI 代理平台"
+    },
+    {
+      "heading": "文件统计",
+      "level": 2,
+      "type": "table",
+      "content": {
+        "headers": ["文件类型", "数量", "占比"],
+        "rows": [
+          ["文档文件 (.md)", "15", "45%"],
+          ["代码文件 (.py)", "4", "12%"],
+          ["配置文件 (.json)", "2", "6%"],
+          ["Typst 文件 (.typ)", "5", "15%"],
+          ["其他文件", "7", "22%"]
+        ]
+      }
+    },
+    {
+      "heading": "使用场景",
+      "level": 2,
+      "type": "list",
+      "items": [
+        "在 GitHub Issue/PR 中生成分析报告",
+        "自动化文档生成",
+        "数据可视化报告",
+        "学术论文解析",
+        "业务分析报告"
+      ]
+    },
+    {
+      "heading": "优势分析",
+      "level": 2,
+      "type": "list",
+      "items": [
+        "模块化设计，易于扩展",
+        "完整的文档和示例",
+        "支持中文排版",
+        "自动化工作流集成",
+        "开源可复用"
+      ]
+    },
+    {
+      "heading": "改进建议",
+      "level": 2,
+      "type": "list",
+      "items": [
+        "增加更多实用技能模块",
+        "完善测试用例",
+        "添加 CI/CD 管道",
+        "提供更多模板示例",
+        "优化性能监控"
+      ]
+    },
+    {
+      "heading": "总结",
+      "level": 2,
+      "type": "text",
+      "content": "Agent Skills 项目是一个设计良好的 OpenCode Agent Skills 集合，提供了实用的 AI 能力模块。typst-report 技能特别值得关注，它解决了文档生成和报告制作的痛点。项目结构清晰，文档完整，具有良好的可扩展性。"
+    }
+  ],
+  "code_blocks": [
+    {
+      "language": "bash",
+      "code": "# 使用 typst-report 生成报告\n/oc 使用 typst-report skill 基于本项目内容生成一份报告"
+    },
+    {
+      "language": "json",
+      "code": "{\n  \"title\": \"报告标题\",\n  \"subtitle\": \"副标题\",\n  \"author\": \"作者\",\n  \"summary\": \"概览内容\",\n  \"metrics\": [\n    {\"label\": \"指标名\", \"value\": \"1,234\", \"change\": 0.15}\n  ]\n}"
+    }
+  ]
+}
