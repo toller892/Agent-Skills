@@ -103,7 +103,6 @@
   set text(
     font: font-stack-body,
     size: 10.5pt,
-    lang: "zh",
     fill: color-text,
   )
 }
