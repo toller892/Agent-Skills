@@ -1,0 +1,105 @@
+{
+  "title": "Issue #test002 测试报告",
+  "subtitle": "Typst Report Skill 功能演示",
+  "author": "OpenCode Agent",
+  "summary": "本报告展示了 typst-report skill 的功能，基于 issue #test002 的对话记录生成专业 PDF 报告。报告包含项目分析、对话统计、功能测试结果和代码示例。",
+  "metrics": [
+    {
+      "label": "对话总数",
+      "value": "8",
+      "change": 0.0
+    },
+    {
+      "label": "参与者",
+      "value": "2",
+      "change": 0.0
+    },
+    {
+      "label": "技能调用",
+      "value": "3",
+      "change": 0.0
+    }
+  ],
+  "sections": [
+    {
+      "heading": "项目概述",
+      "level": 2,
+      "type": "text",
+      "content": "Agent-Skills 是一个为 AI Agent（特别是 Claude Code 和 opencode）设计的技能开发框架。当前包含两个核心技能：Paper Interpreter（论文解析器）和 Typst Report（报告生成器）。"
+    },
+    {
+      "heading": "Issue 对话分析",
+      "level": 2,
+      "type": "table",
+      "headers": ["时间", "参与者", "内容类型", "状态"],
+      "data": [
+        ["2026-01-16 14:03:51", "toller892", "Issue 创建", "✅ 完成"],
+        ["2026-01-16 14:04:12", "toller892", "/opencode 你好", "✅ 响应"],
+        ["2026-01-16 14:04:31", "opencode-agent", "问候响应", "✅ 完成"],
+        ["2026-01-16 14:04:47", "opencode-agent", "权限检查", "⚠️ 无写权限"],
+        ["2026-01-16 14:05:13", "toller892", "/opencode 总结项目", "✅ 响应"],
+        ["2026-01-16 14:06:40", "opencode-agent", "项目总结", "✅ 完成"],
+        ["2026-01-16 14:06:54", "opencode-agent", "权限检查", "⚠️ 无写权限"],
+        ["2026-01-16 14:23:14", "toller892", "/oc 你好", "✅ 响应"]
+      ]
+    },
+    {
+      "heading": "技能测试结果",
+      "level": 2,
+      "type": "checklist",
+      "items": [
+        "Paper Interpreter skill 文档完整",
+        "Typst Report skill 文档完整",
+        "GitHub Actions 工作流配置正确",
+        "opencode.json 配置就绪",
+        "Typst 模板系统功能正常",
+        "PDF 报告生成功能测试中"
+      ]
+    },
+    {
+      "heading": "项目结构分析",
+      "level": 2,
+      "type": "table",
+      "headers": ["模块", "文件数量", "状态", "描述"],
+      "data": [
+        ["paper-interpreter", "12", "✅ 完成", "论文解析器技能"],
+        ["typst-report", "10", "✅ 完成", "报告生成器技能"],
+        [".github/workflows", "1", "✅ 完成", "GitHub Actions 配置"],
+        ["根配置文件", "2", "✅ 完成", "项目配置"]
+      ]
+    },
+    {
+      "heading": "功能使用趋势",
+      "level": 2,
+      "type": "chart",
+      "chart_type": "bar",
+      "data": [
+        {"label": "项目总结", "value": 1},
+        {"label": "技能调用", "value": 2},
+        {"label": "权限检查", "value": 2},
+        {"label": "问候交互", "value": 2}
+      ]
+    },
+    {
+      "heading": "技术架构",
+      "level": 2,
+      "type": "text",
+      "content": "Typst Report skill 采用模块化设计：\n1. 数据层：支持 JSON/CSV/YAML 多种数据格式\n2. 模板层：业务模板、样式库、图表组件\n3. 编译层：Typst 编译器生成 PDF\n4. 集成层：GitHub Actions 自动化流程"
+    }
+  ],
+  "code_blocks": [
+    {
+      "language": "bash",
+      "code": "# Typst 编译命令\ntypst compile \\\n  --input payload='$(cat test-report-data.json)' \\\n  ./typst-report/typst-templates/main.typ \\\n  test-report.pdf"
+    },
+    {
+      "language": "json",
+      "code": "{\n  \"title\": \"报告标题\",\n  \"metrics\": [\n    {\"label\": \"指标1\", \"value\": \"123\", \"change\": 0.15}\n  ],\n  \"sections\": [\n    {\n      \"heading\": \"章节标题\",\n      \"type\": \"text\",\n      \"content\": \"章节内容\"\n    }\n  ]\n}"
+    },
+    {
+      "language": "typst",
+      "code": "#let kpi-cards(metrics, columns: 3) = {\n  let cells = metrics.map(m => {\n    rect(width: 100%, fill: luma(240), inset: 10pt)[\n      #text(size: 10pt, fill: gray)[#m.label] \\\n      #text(size: 18pt, weight: \"bold\")[#m.value]\n    ]\n  })\n  grid(columns: (1fr,) * columns, gutter: 10pt, ..cells)\n}"
+    }
+  ],
+  "appendix": "本报告由 typst-report skill 自动生成。该技能支持：\n- 从 JSON 数据生成专业报告\n- 包含表格、图表、代码块\n- 支持中文排版\n- 自动分页和目录生成\n\n报告生成时间：2026年1月17日"
+}
