@@ -27,6 +27,12 @@
   // 文档元数据
   set document(title: title, author: author)
   
+  // 设置中文字体支持
+  set text(
+    font: ("Linux Libertine", "Noto Sans CJK SC", "Microsoft YaHei", "SimSun"),
+    lang: "zh",
+  )
+  
   // 应用全局样式
   setup-page()
   setup-text()
