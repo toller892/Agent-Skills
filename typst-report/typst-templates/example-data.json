@@ -1,0 +1,74 @@
+{
+  "title": "2026年1月业务报告",
+  "subtitle": "Assistant 项目月度分析",
+  "author": "OpenCode Agent",
+  "summary": "本月项目进展顺利，完成了多项关键功能开发，用户活跃度持续增长。",
+  "metrics": [
+    {
+      "label": "活跃用户",
+      "value": "1,234",
+      "change": 0.15
+    },
+    {
+      "label": "新增功能",
+      "value": "8",
+      "change": 0.33
+    },
+    {
+      "label": "代码提交",
+      "value": "156",
+      "change": -0.05
+    }
+  ],
+  "sections": [
+    {
+      "heading": "项目进展",
+      "level": 2,
+      "type": "text",
+      "content": "本月完成了 Typst 报告生成 skill 的开发，包括数据处理、样式系统和图表组件。"
+    },
+    {
+      "heading": "任务清单",
+      "level": 2,
+      "type": "checklist",
+      "items": [
+        "完成 utils.typ 开发",
+        "完成 theme.typ 开发",
+        "完成 business.typ 开发",
+        "完成 charts.typ 开发",
+        "完成 main.typ 开发"
+      ]
+    },
+    {
+      "heading": "数据统计",
+      "level": 2,
+      "type": "table",
+      "headers": ["模块", "代码行数", "状态"],
+      "data": [
+        ["utils.typ", "150", "✅ 完成"],
+        ["theme.typ", "200", "✅ 完成"],
+        ["business.typ", "180", "✅ 完成"],
+        ["charts.typ", "160", "✅ 完成"],
+        ["main.typ", "80", "✅ 完成"]
+      ]
+    },
+    {
+      "heading": "月度趋势",
+      "level": 2,
+      "type": "chart",
+      "chart_type": "bar",
+      "data": [
+        {"label": "第1周", "value": 25},
+        {"label": "第2周", "value": 38},
+        {"label": "第3周", "value": 42},
+        {"label": "第4周", "value": 51}
+      ]
+    }
+  ],
+  "code_blocks": [
+    {
+      "language": "typst",
+      "code": "#let kpi-cards(metrics) = {\n  grid(columns: (1fr, 1fr, 1fr), ..metrics)\n}"
+    }
+  ]
+}
