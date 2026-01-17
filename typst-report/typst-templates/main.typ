@@ -68,15 +68,31 @@
   
   // 根据类型渲染内容
   #if section-type == "text" [
-    #content-text
+    // 使用 process-markdown 处理文本
+    #process-markdown(content-text)
+  ] else if section-type == "list" [
+    #let items = safe-get(section, "items", default: ())
+    #for item in items [
+      - #item
+    ]
   ] else if section-type == "checklist" [
     #let items = safe-get(section, "items", default: ())
     #for item in items [
       - [ ] #item
     ]
   ] else if section-type == "table" [
+    // 兼容两种数据结构
     #let headers = safe-get(section, "headers", default: ())
     #let data = safe-get(section, "data", default: ())
+    
+    // 如果 headers 为空，尝试从 content 中获取
+    #if headers.len() == 0 [
+      #let content-obj = safe-get(section, "content", default: ())
+      #headers = safe-get(content-obj, "headers", default: ())
+      #let rows = safe-get(content-obj, "rows", default: ())
+      #data = rows
+    ]
+    
     #if headers.len() > 0 and data.len() > 0 [
       #data-table(headers, data)
     ]

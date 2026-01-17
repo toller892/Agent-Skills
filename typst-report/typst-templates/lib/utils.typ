@@ -104,9 +104,7 @@
   if date == none { return "N/A" }
   
   if format == "zh" {
-    str(date.year()) + "年" + 
-    str(date.month()) + "月" + 
-    str(date.day()) + "日"
+    str(date.year()) + "年" + str(date.month()) + "月" + str(date.day()) + "日"
   } else if format == "iso" {
     date.display("[year]-[month]-[day]")
   } else {
@@ -120,9 +118,7 @@
   if date == none { return "N/A" }
   
   if format == "zh" {
-    format-date(date, format: "zh") + " " +
-    str(date.hour()).pad(2, with: "0") + ":" +
-    str(date.minute()).pad(2, with: "0")
+    format-date(date, format: "zh") + " " + str(date.hour()).pad(2, with: "0") + ":" + str(date.minute()).pad(2, with: "0")
   } else {
     date.display("[year]-[month]-[day] [hour]:[minute]")
   }
@@ -209,4 +205,15 @@
   
   let str-text = str(text)
   upper(str-text.at(0)) + str-text.slice(1)
+}
+
+/// 处理 Markdown 格式文本
+/// 将常见 Markdown 语法转换为 Typst 格式
+#let process-markdown(text) = {
+  if text == none or text == "" { return "" }
+  
+  // Typst 中直接返回原文本
+  // 因为 Typst 的字符串没有 replace 方法
+  // 需要在 JSON 生成阶段就处理好格式
+  text
 }

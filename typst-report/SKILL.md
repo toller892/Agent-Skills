@@ -117,12 +117,27 @@ PDF
     {
       "heading": "背景",
       "content": "项目需要...",
-      "level": 2
+      "level": 2,
+      "type": "text"
     },
     {
       "heading": "任务清单",
       "items": ["任务1", "任务2"],
       "type": "checklist"
+    },
+    {
+      "heading": "普通列表",
+      "items": ["项目1", "项目2"],
+      "type": "list"
+    },
+    {
+      "heading": "数据表格",
+      "type": "table",
+      "headers": ["列1", "列2", "列3"],
+      "data": [
+        ["值1", "值2", "值3"],
+        ["值4", "值5", "值6"]
+      ]
     }
   ],
   "code_blocks": [
@@ -133,6 +148,11 @@ PDF
   ]
 }
 ```
+
+**重要提示：**
+- ⚠️ **不要在 content 中使用 Markdown 语法**（如 `**粗体**`），应使用 Typst 语法（`*粗体*`）
+- ⚠️ **表格数据使用 `headers` 和 `data` 字段**，不要嵌套在 `content` 对象中
+- ⚠️ **列表使用 `type: "list"` 或 `type: "checklist"`**，并提供 `items` 数组
 
 **在 Typst 中渲染：**
 ```typst
