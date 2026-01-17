@@ -5,9 +5,9 @@
 // ============================================
 
 // 中西文混排字体栈
-#let font-stack-body = ("Noto Sans SC", "Noto Sans", "Arial")
-#let font-stack-heading = ("Noto Sans SC", "Noto Sans", "Arial")
-#let font-stack-mono = ("Noto Sans Mono", "Courier New", "monospace")
+#let font-stack-body = ("Noto Sans", "Noto Sans CJK SC", "Microsoft YaHei", "SimSun", "Arial")
+#let font-stack-heading = ("Noto Sans", "Noto Sans CJK SC", "Microsoft YaHei", "SimSun", "Arial")
+#let font-stack-mono = ("Noto Sans Mono", "Courier New", "Consolas", "monospace")
 
 // ============================================
 // 颜色系统
