@@ -16,6 +16,14 @@ from pathlib import Path
 from datetime import datetime
 
 
+def convert_markdown_to_typst(text):
+    """将 Markdown 格式转换为 Typst 格式"""
+    import re
+    # 将 **text** 转换为 *text* (粗体)
+    text = re.sub(r'\*\*([^*]+)\*\*', r'*\1*', text)
+    return text
+
+
 def generate_business_report(data: dict, output_file: str = None) -> str:
     """
     生成商业报告 .typ 文件
@@ -72,7 +80,7 @@ def generate_business_report(data: dict, output_file: str = None) -> str:
 
 = 概览
 
-{summary}
+{convert_markdown_to_typst(summary)}
 
 """
     
@@ -109,18 +117,18 @@ def generate_business_report(data: dict, output_file: str = None) -> str:
         # 根据类型生成内容
         if section_type == "text":
             content = section.get("content", "")
-            typ_content += f"{content}\n\n"
+            typ_content += f"{convert_markdown_to_typst(content)}\n\n"
         
         elif section_type == "list":
             items = section.get("items", [])
             for item in items:
-                typ_content += f"- {item}\n"
+                typ_content += f"- {convert_markdown_to_typst(item)}\n"
             typ_content += "\n"
         
         elif section_type == "checklist":
             items = section.get("items", [])
             for item in items:
-                typ_content += f"- [ ] {item}\n"
+                typ_content += f"- [ ] {convert_markdown_to_typst(item)}\n"
             typ_content += "\n"
         
         elif section_type == "table":
@@ -129,10 +137,10 @@ def generate_business_report(data: dict, output_file: str = None) -> str:
             
             if headers and data_rows:
                 typ_content += "#data-table(\n"
-                typ_content += f"  ({', '.join([f'[*{h}*]' for h in headers])}),\n"
+                typ_content += f"  ({', '.join([f'[*{convert_markdown_to_typst(h)}*]' for h in headers])}),\n"
                 typ_content += "  (\n"
                 for row in data_rows:
-                    typ_content += f"    ({', '.join([f'[{cell}]' for cell in row])}),\n"
+                    typ_content += f"    ({', '.join([f'[{convert_markdown_to_typst(str(cell))}]' for cell in row])}),\n"
                 typ_content += "  )\n"
                 typ_content += ")\n\n"
         
@@ -230,9 +238,9 @@ def generate_academic_paper(data: dict) -> str:
             if headers and data_rows:
                 typ_content += "#three-line-table(\n"
                 typ_content += f"  columns: ({', '.join(['auto'] * len(headers))}),\n"
-                typ_content += f"  {', '.join([f'[*{h}*]' for h in headers])},\n"
+                typ_content += f"  {', '.join([f'[*{convert_markdown_to_typst(h)}*]' for h in headers])},\n"
                 for row in data_rows:
-                    typ_content += f"  {', '.join([f'[{cell}]' for cell in row])},\n"
+                    typ_content += f"  {', '.join([f'[{convert_markdown_to_typst(str(cell))}]' for cell in row])},\n"
                 typ_content += ")\n\n"
     
     return typ_content

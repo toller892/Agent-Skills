@@ -31,6 +31,8 @@ description: 使用 Typst 生成专业 PDF 报告，支持图表、表格、多�
 *粗体* _斜体_ `代码`
 ```
 
+**注意：** Typst 使用单星号 `*text*` 表示粗体，与 Markdown 的双星号 `**text**` 不同。Skill 会自动将 JSON 数据中的 Markdown 格式转换为 Typst 格式。
+
 ### 列表
 ```typst
 - 无序列表项

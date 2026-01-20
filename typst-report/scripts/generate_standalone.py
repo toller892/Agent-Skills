@@ -117,6 +117,14 @@ def get_standalone_header(title, subtitle, author):
     return header
 
 
+def convert_markdown_to_typst(text):
+    """将 Markdown 格式转换为 Typst 格式"""
+    import re
+    # 将 **text** 转换为 *text* (粗体)
+    text = re.sub(r'\*\*([^*]+)\*\*', r'*\1*', text)
+    return text
+
+
 def generate_standalone_report(data):
     """生成独立版本的报告"""
     title = data.get("title", "报告")
@@ -129,8 +137,8 @@ def generate_standalone_report(data):
     # 生成文件头部
     content = get_standalone_header(title, subtitle, author)
     
-    # 添加概览
-    content += "= 概览\n\n{}\n\n".format(summary)
+    # 添加概览（转换格式）
+    content += "= 概览\n\n{}\n\n".format(convert_markdown_to_typst(summary))
     
     # 添加 KPI 指标
     if metrics:
@@ -151,10 +159,10 @@ def generate_standalone_report(data):
         content += "{} {}\n\n".format('=' * level, heading)
         
         if section_type == "text":
-            content += "{}\n\n".format(section.get('content', ''))
+            content += "{}\n\n".format(convert_markdown_to_typst(section.get('content', '')))
         elif section_type == "list":
             for item in section.get("items", []):
-                content += "- {}\n".format(item)
+                content += "- {}\n".format(convert_markdown_to_typst(item))
             content += "\n"
         elif section_type == "table":
             headers = section.get("headers", [])
@@ -162,9 +170,9 @@ def generate_standalone_report(data):
             if headers and data_rows:
                 content += "#styled-table(\n"
                 content += "  columns: ({}),\n".format(', '.join(['1fr'] * len(headers)))
-                content += "  {},\n".format(', '.join(['[*{}*]'.format(h) for h in headers]))
+                content += "  {},\n".format(', '.join(['[*{}*]'.format(convert_markdown_to_typst(h)) for h in headers]))
                 for row in data_rows:
-                    content += "  {},\n".format(', '.join(['[{}]'.format(cell) for cell in row]))
+                    content += "  {},\n".format(', '.join(['[{}]'.format(convert_markdown_to_typst(str(cell))) for cell in row]))
                 content += ")\n\n"
     
     return content
