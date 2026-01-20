@@ -117,6 +117,36 @@ def test_json_file_compile():
     return success
 
 
+def test_generate_workflow():
+    """测试完整生成工作流"""
+    print("\n" + "=" * 50)
+    print("测试 4: 完整生成工作流（JSON → .typ → PDF）")
+    print("=" * 50)
+    
+    from generate_report import generate_report_workflow
+    
+    json_file = "../typst-templates/example-data.json"
+    output_dir = "../typst-templates/test-output"
+    
+    result = generate_report_workflow(
+        json_file=json_file,
+        output_dir=output_dir,
+        template="business",
+        keep_typ=True,
+    )
+    
+    if result:
+        print("\n✓ 测试 4 通过")
+        print(f"  生成的文件:")
+        if result["typ_file"]:
+            print(f"    - {result['typ_file']}")
+        print(f"    - {result['pdf_file']}")
+    else:
+        print("\n✗ 测试 4 失败")
+    
+    return result is not None
+
+
 def main():
     print("Typst 编译功能测试")
     print("=" * 50)
@@ -135,6 +165,7 @@ def main():
     results.append(("基础编译", test_basic_compile()))
     results.append(("JSON 数据编译", test_json_compile()))
     results.append(("JSON 文件编译", test_json_file_compile()))
+    results.append(("完整生成工作流", test_generate_workflow()))
     
     # 显示结果
     print("\n" + "=" * 50)
