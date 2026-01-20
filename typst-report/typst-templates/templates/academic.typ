@@ -15,6 +15,7 @@
 /// - date: 日期（默认今天）
 /// - abstract: 摘要（可选）
 /// - keywords: 关键词数组（可选）
+/// - show-header: 是否显示页眉（默认 false）
 /// - body: 论文内容
 #let academic-conf(
   title: "",
@@ -22,6 +23,7 @@
   date: datetime.today(),
   abstract: none,
   keywords: (),
+  show-header: false,
   body
 ) = {
   // 文档元数据
@@ -36,14 +38,18 @@
     margin: (x: 2cm, y: 2.5cm),
     numbering: "1 / 1",  // 当前页 / 总页数
     
-    // 页眉
-    header: context {
-      align(right)[
-        #text(size: 9pt, fill: brand-gray-600)[
-          #title
+    // 页眉（可选）
+    header: if show-header {
+      context {
+        align(right)[
+          #text(size: 9pt, fill: brand-gray-600)[
+            #title
+          ]
         ]
-      ]
-      line(length: 100%, stroke: 0.5pt + brand-gray-300)
+        line(length: 100%, stroke: 0.5pt + brand-gray-300)
+      }
+    } else {
+      none
     },
     
     // 页脚
@@ -147,14 +153,14 @@
   }
   
   // ============================================
-  // 封面（简洁版）
+  // 封面（简洁版 - 完全符合标准格式）
   // ============================================
   
   align(center)[
     #text(1.5em, weight: "bold")[#title]
     #v(0.5em)
-    作者：#author \
-    日期：#format-date(date)
+    #author \
+    #date.display("[year]年[month]月[day]日")
   ]
   
   #line(length: 100%)

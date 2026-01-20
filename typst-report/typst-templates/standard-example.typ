@@ -1,15 +1,11 @@
-// academic-example.typ - 学术论文示例（完全符合标准格式）
+// standard-example.typ - 完全符合标准格式的示例
 
 #import "templates/academic.typ": *
 
 #show: academic-conf.with(
   title: "Typst 修复版示例文档",
-  author: "日期：2026年1月20日",  // 或者直接写作者名
-  show-header: false,  // 不显示页眉，更简洁
-  abstract: [
-    Typst 是一个基于标记的现代排版系统。它的特点是编译速度极快，且拥有强大的脚本能力。本文介绍了 Typst 的基本语法和使用方法。
-  ],
-  keywords: ("Typst", "排版系统", "标记语言"),
+  author: "AI 助手",
+  show-header: false,
 )
 
 = 简介 (Introduction)
@@ -52,16 +48,6 @@ $ mat(1, 2; 3, 4) dot vec(x, y) = vec(5, 6) $
 #for c in colors [
   - 这是一个 #text(fill: c)[彩色] 的列表项
 ]
-
-= 表格示例
-
-#three-line-table(
-  columns: (auto, 1fr, 1fr),
-  [*序号*], [*项目*], [*数值*],
-  [1], [项目 A], [123],
-  [2], [项目 B], [456],
-  [3], [项目 C], [789],
-)
 
 = 结论
 
