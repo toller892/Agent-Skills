@@ -19,7 +19,8 @@
 
 ## 功能特性
 
-- 🔄 **编译能力** - 将 .typ 源文件编译为 PDF
+- 🔄 **完整工作流** - JSON → .typ → PDF
+- 📄 **双重输出** - 生成 .typ 源文件和 PDF 文档
 - 📊 **数据驱动** - 从 JSON/CSV 数据生成报告
 - 🎨 **中文排版** - 支持中文字体和排版规范
 - 📈 **图表组件** - 折线图、柱状图、KPI 卡片
@@ -56,10 +57,43 @@ typst-report/
 
 ## 使用方式
 
-### 方式 1: 使用编译脚本（推荐）
+### 方式 1: 完整工作流（推荐）
+
+**同时生成 .typ 源文件和 PDF 文档**
 
 ```bash
-# Python 脚本（跨平台）
+# 从 JSON 数据生成报告
+python scripts/generate_report.py data.json
+
+# 输出:
+#   output/report_20260120_143000.typ  ← Typst 源文件
+#   output/report_20260120_143000.pdf  ← PDF 文档
+```
+
+### 方式 2: 分步执行
+
+**步骤 1: 生成 .typ 文件**
+```bash
+python scripts/generate.py data.json -o report.typ
+```
+
+**步骤 2: 编译为 PDF**
+```bash
+python scripts/compile.py report.typ
+```
+
+### 方式 3: 一步到位
+
+**生成 .typ 并自动编译**
+```bash
+python scripts/generate.py data.json -o report.typ --compile
+```
+
+### 方式 4: 使用现有模板
+
+**直接编译模板文件**
+```bash
+# 使用编译脚本（跨平台）
 python scripts/compile.py typst-templates/standard-example.typ
 
 # 传递 JSON 数据
@@ -73,7 +107,7 @@ bash scripts/compile.sh typst-templates/standard-example.typ
 scripts\compile.bat typst-templates\standard-example.typ
 ```
 
-### 方式 2: 直接使用 Typst CLI
+### 方式 5: 直接使用 Typst CLI
 
 ```bash
 # 基础编译
@@ -86,7 +120,7 @@ typst compile \
   test-report.pdf
 ```
 
-### 方式 3: 在 GitHub Issue/PR 中
+### 方式 6: 在 GitHub Issue/PR 中
 
 评论：
 ```
@@ -129,13 +163,77 @@ python scripts/test_compile.py
 }
 ```
 
-## 依赖
+## Skill 输出内容
 
-- Typst >= 0.11.0
-- 中文字体（Noto Sans SC）
+这个 skill 会生成以下文件：
+
+### 1. .typ 源文件（可选保留）
+
+Typst 源代码文件，包含：
+- 文档结构和内容
+- 格式化标记
+- 数据引用
+- 可读、可编辑、可版本控制
+
+**示例：**
+```typst
+#import "templates/business.typ": *
+
+#show: report-conf.with(
+  title: "月度报告",
+  author: "系统",
+)
+
+= 概览
+本月业绩良好...
+
+#kpi-cards((
+  (label: "销售额", value: "¥1,234,567", change: 0.15),
+))
+```
+
+### 2. PDF 文档（最终输出）
+
+专业排版的 PDF 文件，包含：
+- ✅ 封面页（标题、作者、日期）
+- ✅ 目录页（自动生成）
+- ✅ 正文内容（格式化文本、表格、图表）
+- ✅ 页眉页脚（页码）
+- ✅ 矢量图表（可缩放）
+
+### 输出方式
+
+**方式 1: 仅生成 .typ 文件**
+```bash
+python scripts/generate.py data.json -o report.typ
+```
+
+**方式 2: 生成 .typ 并编译为 PDF**
+```bash
+python scripts/generate.py data.json -o report.typ --compile
+```
+
+**方式 3: 完整工作流（推荐）**
+```bash
+# 同时生成 .typ 和 PDF
+python scripts/generate_report.py data.json
+
+# 输出:
+#   output/report_20260120_143000.typ  ← 源文件
+#   output/report_20260120_143000.pdf  ← PDF 文档
+```
+
+**方式 4: 仅保留 PDF**
+```bash
+# 不保留 .typ 源文件
+python scripts/generate_report.py data.json --no-keep-typ
+```
 
 ## 参考资源
 
+- [输出内容详解](OUTPUTS.md) - 了解 .typ 和 PDF 文件
+- [使用指南](USAGE.md) - 详细使用说明
+- [快速演示](DEMO.md) - 实际示例演示
 - [Typst 官方文档](https://typst.app/docs/)
 - [CeTZ 图表库](https://typst.app/universe/package/cetz-plot/)
 - [开发计划](../../doc/typst-skill-development-plan.md)
