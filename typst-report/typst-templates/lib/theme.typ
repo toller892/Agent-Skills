@@ -5,8 +5,8 @@
 // ============================================
 
 // 中西文混排字体栈
-#let font-stack-body = ("Noto Sans", "Noto Sans CJK SC", "Microsoft YaHei", "SimSun", "Arial")
-#let font-stack-heading = ("Noto Sans", "Noto Sans CJK SC", "Microsoft YaHei", "SimSun", "Arial")
+#let font-stack-body = ("Noto Sans", "Noto Sans CJK SC")
+#let font-stack-heading = ("Noto Sans", "Noto Sans CJK SC")
 #let font-stack-mono = ("Noto Sans Mono", "Courier New", "Consolas", "monospace")
 
 // ============================================
@@ -161,7 +161,7 @@
   // 标题后段落不缩进
   show heading: it => {
     it
-    par(first-line-indent: 0em)[#v(0pt, weak: true)]
+    par(first-line-indent: 0em)[]
   }
 }
 

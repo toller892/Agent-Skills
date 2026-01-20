@@ -69,7 +69,7 @@
   // ============================================
   
   set text(
-    font: ("Linux Libertine", "Noto Serif CJK SC", "SimSun"),
+    font: ("Noto Sans", "Noto Sans CJK SC"),
     size: 11pt,
     lang: "zh",
   )
