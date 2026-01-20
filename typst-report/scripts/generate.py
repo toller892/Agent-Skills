@@ -16,12 +16,13 @@ from pathlib import Path
 from datetime import datetime
 
 
-def generate_business_report(data: dict) -> str:
+def generate_business_report(data: dict, output_file: str = None) -> str:
     """
     生成商业报告 .typ 文件
     
     参数：
         data: JSON 数据字典
+        output_file: 输出文件路径（用于计算相对路径）
     
     返回：
         生成的 .typ 文件内容
@@ -33,13 +34,29 @@ def generate_business_report(data: dict) -> str:
     metrics = data.get("metrics", [])
     sections = data.get("sections", [])
     
+    # 计算相对路径
+    if output_file:
+        from pathlib import Path
+        output_path = Path(output_file).resolve()
+        template_dir = Path("typst-report/typst-templates").resolve()
+        
+        try:
+            # 计算相对路径
+            rel_path = os.path.relpath(template_dir, output_path.parent)
+            import_prefix = rel_path.replace("\\", "/")
+        except ValueError:
+            # 如果在不同驱动器，使用绝对路径
+            import_prefix = "typst-report/typst-templates"
+    else:
+        import_prefix = "templates"
+    
     # 生成 .typ 内容
     typ_content = f"""// 自动生成的商业报告
 // 生成时间: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 
-#import "templates/business.typ": *
-#import "lib/utils.typ": *
-#import "lib/charts.typ": *
+#import "{import_prefix}/templates/business.typ": *
+#import "{import_prefix}/lib/utils.typ": *
+#import "{import_prefix}/lib/charts.typ": *
 
 // 报告配置
 #show: report-conf.with(
@@ -240,9 +257,9 @@ def generate_typst_file(
     try:
         # 根据模板类型生成内容
         if template == "business":
-            typ_content = generate_business_report(data)
+            typ_content = generate_business_report(data, output_file)
         elif template == "academic":
-            typ_content = generate_academic_paper(data)
+            typ_content = generate_academic_paper(data, output_file)
         else:
             print(f"✗ 不支持的模板类型: {template}")
             return False
@@ -304,6 +321,49 @@ def main():
         action="store_true",
         help="生成后自动编译为 PDF"
     )
+    
+    parser.add_argument(
+        "-s", "--standalone",
+        action="store_true",
+        help="生成独立版本（无需外部依赖，可直接在在线编辑器使用）"
+    )
+    
+    args = parser.parse_args()
+    
+    # 如果是独立版本，使用专门的生成器
+    if args.standalone:
+        from generate_standalone import generate_standalone_report
+        
+        # 读取 JSON 数据
+        try:
+            with open(args.json_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+        except Exception as e:
+            print(f"✗ 读取 JSON 文件失败: {e}")
+            sys.exit(1)
+        
+        # 生成独立版本
+        print("生成独立版本 .typ 文件...")
+        typ_content = generate_standalone_report(data)
+        
+        # 写入文件
+        try:
+            with open(args.output, 'w', encoding='utf-8') as f:
+                f.write(typ_content)
+            print(f"✓ 生成成功: {args.output}")
+            print(f"  可直接在 Typst 在线编辑器中使用")
+        except Exception as e:
+            print(f"✗ 写入文件失败: {e}")
+            sys.exit(1)
+        
+        # 如果需要编译
+        if args.compile:
+            print("\n开始编译...")
+            from compile import compile_typst
+            pdf_file = Path(args.output).with_suffix('.pdf')
+            compile_typst(args.output, str(pdf_file))
+        
+        sys.exit(0)
     
     args = parser.parse_args()
     

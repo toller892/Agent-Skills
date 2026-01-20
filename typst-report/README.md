@@ -21,6 +21,7 @@
 
 - 🔄 **完整工作流** - JSON → .typ → PDF
 - 📄 **双重输出** - 生成 .typ 源文件和 PDF 文档
+- 🌐 **在线编辑器友好** - 默认生成独立版本，可直接在 Typst 在线编辑器中使用
 - 📊 **数据驱动** - 从 JSON/CSV 数据生成报告
 - 🎨 **中文排版** - 支持中文字体和排版规范
 - 📈 **图表组件** - 折线图、柱状图、KPI 卡片
@@ -59,16 +60,21 @@ typst-report/
 
 ### 方式 1: 完整工作流（推荐）
 
-**同时生成 .typ 源文件和 PDF 文档**
+**同时生成 .typ 源文件和 PDF 文档（默认生成独立版本）**
 
 ```bash
 # 从 JSON 数据生成报告
 python scripts/generate_report.py data.json
 
 # 输出:
-#   output/report_20260120_143000.typ  ← Typst 源文件
+#   output/report_20260120_143000.typ  ← 独立版本，可直接在线编辑
 #   output/report_20260120_143000.pdf  ← PDF 文档
 ```
+
+**生成的 .typ 文件可以：**
+- ✅ 直接在 Typst 在线编辑器中使用
+- ✅ 本地编译
+- ✅ 分享给他人使用
 
 ### 方式 2: 分步执行
 
@@ -231,9 +237,11 @@ python scripts/generate_report.py data.json --no-keep-typ
 
 ## 参考资源
 
+- [独立版本说明](STANDALONE.md) - 了解独立版本的优势
 - [输出内容详解](OUTPUTS.md) - 了解 .typ 和 PDF 文件
 - [使用指南](USAGE.md) - 详细使用说明
 - [快速演示](DEMO.md) - 实际示例演示
+- [故障排除](TROUBLESHOOTING.md) - 常见问题解决
 - [Typst 官方文档](https://typst.app/docs/)
 - [CeTZ 图表库](https://typst.app/universe/package/cetz-plot/)
 - [开发计划](../../doc/typst-skill-development-plan.md)

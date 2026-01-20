@@ -25,6 +25,7 @@ def generate_report_workflow(
     output_dir: str = "output",
     template: str = "business",
     keep_typ: bool = True,
+    standalone: bool = True,
 ) -> dict:
     """
     完整的报告生成工作流
@@ -34,6 +35,7 @@ def generate_report_workflow(
         output_dir: 输出目录
         template: 模板类型
         keep_typ: 是否保留 .typ 文件
+        standalone: 是否生成独立版本（默认 True）
     
     返回：
         生成的文件信息
@@ -68,17 +70,36 @@ def generate_report_workflow(
     
     # 步骤 2: 生成 .typ 文件
     print("\n" + "=" * 50)
-    print("步骤 2: 生成 .typ 源文件")
+    if standalone:
+        print("步骤 2: 生成独立版本 .typ 源文件")
+        print("  （可直接在 Typst 在线编辑器中使用）")
+    else:
+        print("步骤 2: 生成 .typ 源文件")
     print("=" * 50)
     
-    success = generate_typst_file(
-        data=data,
-        output_file=str(typ_file),
-        template=template,
-    )
-    
-    if not success:
-        return None
+    if standalone:
+        # 使用独立版本生成器
+        from generate_standalone import generate_standalone_report
+        typ_content = generate_standalone_report(data)
+        
+        try:
+            with open(typ_file, 'w', encoding='utf-8') as f:
+                f.write(typ_content)
+            print(f"✓ 生成成功: {typ_file}")
+            print(f"  文件大小: {os.path.getsize(typ_file)} 字节")
+        except Exception as e:
+            print(f"✗ 生成失败: {e}")
+            return None
+    else:
+        # 使用模板导入方式
+        success = generate_typst_file(
+            data=data,
+            output_file=str(typ_file),
+            template=template,
+        )
+        
+        if not success:
+            return None
     
     # 步骤 3: 编译为 PDF
     print("\n" + "=" * 50)
@@ -159,6 +180,24 @@ def main():
         help="不保留 .typ 源文件"
     )
     
+    parser.add_argument(
+        "--standalone",
+        action="store_true",
+        default=True,
+        help="生成独立版本（默认启用，可直接在在线编辑器使用）"
+    )
+    
+    parser.add_argument(
+        "--no-standalone",
+        action="store_true",
+        help="不生成独立版本（使用模板导入方式）"
+    )
+    
+    args = parser.parse_args()
+    
+    # 确定是否使用独立版本
+    use_standalone = args.standalone and not args.no_standalone
+    
     args = parser.parse_args()
     
     # 检查 Typst 是否安装
@@ -174,6 +213,7 @@ def main():
         output_dir=args.output_dir,
         template=args.template,
         keep_typ=not args.no_keep_typ,
+        standalone=use_standalone,
     )
     
     if result is None:
