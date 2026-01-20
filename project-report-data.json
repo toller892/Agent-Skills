@@ -1,0 +1,131 @@
+{
+  "title": "Agent Skills 项目分析报告",
+  "subtitle": "OpenCode Agent Skills 集合项目分析",
+  "author": "OpenCode Agent",
+  "date": "2026-01-20",
+  "summary": "本项目是一个 OpenCode Agent Skills 集合，包含可复用的 AI 能力模块。目前包含两个核心 skill：Typst 报告生成和论文推文串解析器。项目结构清晰，文档完善，展示了如何构建可复用的 AI 技能模块。",
+  "metrics": [
+    {
+      "label": "Skill 数量",
+      "value": "2",
+      "change": 0.0
+    },
+    {
+      "label": "代码文件",
+      "value": "25+",
+      "change": 0.0
+    },
+    {
+      "label": "文档文件",
+      "value": "15+",
+      "change": 0.0
+    },
+    {
+      "label": "模板文件",
+      "value": "10+",
+      "change": 0.0
+    }
+  ],
+  "sections": [
+    {
+      "heading": "项目概述",
+      "level": 2,
+      "type": "text",
+      "content": "Agent Skills 是一个 OpenCode Agent 技能集合项目，旨在提供可复用的 AI 能力模块。每个 skill 都是独立的、可配置的 AI 功能单元，可以在不同的 OpenCode 项目中复用。\n\n项目采用模块化设计，每个 skill 包含完整的文档、示例代码和配置文件，便于其他开发者理解和集成。"
+    },
+    {
+      "heading": "核心 Skill 分析",
+      "level": 2,
+      "type": "text",
+      "content": "### 1. Typst Report Generation Skill\n\n**功能**：使用 Typst 排版系统生成专业的 PDF 报告，支持图表、表格、多栏布局，适用于业务分析、需求文档等场景。\n\n**特点**：\n- 从 JSON/CSV 数据生成报告\n- 支持中文排版\n- 包含表格、图表、封面、目录\n- 矢量图表（CeTZ）支持\n- 自动分页和页码\n\n**技术栈**：Typst >= 0.11.0，Python/Shell 编译脚本\n\n### 2. Paper Interpreter Skill\n\n**功能**：将学术论文转化为病毒式传播的 Twitter Thread（推文串），让复杂研究人人能懂。\n\n**特点**：\n- 论文→推文串解读\n- 黄叔风格（通俗易懂）\n- 纽约客插画风格配图\n- 2026 设计风格的网页输出\n- 支持多种输入格式（PDF、MD、DOCX 等）\n\n**技术栈**：Python，Nano Banana API（Gemini 2.5 Flash）"
+    },
+    {
+      "heading": "项目结构分析",
+      "level": 2,
+      "type": "table",
+      "headers": ["目录", "文件数量", "主要功能", "状态"],
+      "data": [
+        ["typst-report/", "15+", "Typst 报告生成技能", "✅ 完成"],
+        ["typst-report/scripts/", "4", "编译脚本（Python/Shell/Bat）", "✅ 完成"],
+        ["typst-report/typst-templates/", "10+", "Typst 模板和组件", "✅ 完成"],
+        ["paper-interpreter/", "10+", "论文推文串解析器", "✅ 完成"],
+        ["paper-interpreter/scripts/", "6", "Python 脚本和示例", "✅ 完成"],
+        ["paper-interpreter/references/", "6", "详细文档和指南", "✅ 完成"],
+        [".github/workflows/", "1", "GitHub Actions 配置", "✅ 完成"]
+      ]
+    },
+    {
+      "heading": "技术架构",
+      "level": 2,
+      "type": "list",
+      "items": [
+        "模块化设计：每个 skill 独立，可单独使用或组合",
+        "文档驱动：每个 skill 包含完整的 SKILL.md 和 README.md",
+        "跨平台支持：提供 Python、Shell、Bat 多种编译脚本",
+        "数据驱动：Typst skill 支持 JSON/CSV 数据输入",
+        "API 集成：Paper Interpreter 集成 Nano Banana API 生成配图",
+        "现代排版：使用 Typst 替代 LaTeX，更简单高效"
+      ]
+    },
+    {
+      "heading": "文件统计",
+      "level": 2,
+      "type": "chart",
+      "chart_type": "bar",
+      "data": [
+        {"label": "Typst 模板", "value": 10},
+        {"label": "Python 脚本", "value": 6},
+        {"label": "文档文件", "value": 15},
+        {"label": "配置文件", "value": 3},
+        {"label": "示例数据", "value": 2}
+      ]
+    },
+    {
+      "heading": "使用场景",
+      "level": 2,
+      "type": "checklist",
+      "items": [
+        "业务报告自动生成（Typst skill）",
+        "学术论文通俗化解读（Paper Interpreter）",
+        "技术文档排版和发布",
+        "社交媒体内容创作",
+        "AI 技能模块复用和集成",
+        "OpenCode Agent 能力扩展"
+      ]
+    },
+    {
+      "heading": "开发规范",
+      "level": 2,
+      "type": "text",
+      "content": "项目遵循统一的 skill 开发规范：\n\n1. **每个 skill 必须包含**：\n   - `SKILL.md` - Skill 定义文件（必需）\n   - `README.md` - 使用说明\n   - `scripts/` - 可执行脚本（可选）\n   - `references/` - 参考文档（可选）\n\n2. **文档要求**：\n   - 中文文档，清晰易懂\n   - 包含快速开始指南\n   - 提供完整的使用示例\n   - 说明依赖和环境配置\n\n3. **代码规范**：\n   - 模块化设计\n   - 错误处理完善\n   - 跨平台兼容性\n   - 配置外部化"
+    },
+    {
+      "heading": "未来扩展方向",
+      "level": 2,
+      "type": "list",
+      "items": [
+        "添加更多 AI 技能模块（图像处理、数据分析等）",
+        "开发 skill 市场/仓库功能",
+        "增加技能组合和流水线功能",
+        "提供 Web UI 配置界面",
+        "支持更多数据格式和 API",
+        "集成更多 AI 模型和工具"
+      ]
+    }
+  ],
+  "code_blocks": [
+    {
+      "language": "bash",
+      "code": "# 使用 Typst skill 生成报告\npython typst-report/scripts/compile.py \\\n  typst-report/typst-templates/main.typ \\\n  --json-file project-report-data.json"
+    },
+    {
+      "language": "python",
+      "code": "# Paper Interpreter 示例使用\nimport requests\nimport json\n\n# 读取论文文件并生成推文串\ndef generate_thread(paper_content):\n    # 解析论文内容\n    # 生成推文串结构\n    # 调用 API 生成配图\n    return thread_content"
+    },
+    {
+      "language": "typst",
+      "code": "# Typst 报告模板示例\n#import \"templates/business.typ\": report-conf\n\n#let payload = json.decode(sys.inputs.at(\"payload\", default: \"{}\"))\n\n#show: report-conf.with(\n  title: payload.at(\"title\", default: \"业务报告\"),\n  author: \"System\",\n)\n\n= 概览\n#payload.at(\"summary\", default: \"无数据\")"
+    }
+  ],
+  "appendix": "本报告基于 Agent Skills 项目实际内容生成，数据来源于项目文件分析。报告展示了项目的完整架构、功能特性和技术实现，可作为项目文档和推广材料使用。"
+}
