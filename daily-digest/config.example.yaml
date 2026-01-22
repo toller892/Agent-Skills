@@ -1,0 +1,52 @@
+# Daily Digest 配置文件
+# 复制此文件为 config.yaml 并修改
+
+# Obsidian Vault 路径
+vault_path: ~/Obsidian/MyVault
+
+# 摘要输出目录（相对于 vault）
+digest_dir: Daily Digest
+archive_dir: Daily Digest/Archive
+
+# 数据源配置
+sources:
+  hacker_news:
+    enabled: true
+    limit: 20
+    categories:
+      - top
+      - show
+      - ask
+  
+  product_hunt:
+    enabled: true
+    limit: 10
+  
+  newsletters:
+    enabled: true
+    feeds:
+      - name: "Hacker Newsletter"
+        url: "https://hackernewsletter.com/rss.xml"
+      - name: "TLDR Tech"
+        url: "https://tldr.tech/tech/rss.xml"
+      # 添加更多订阅源
+      # - name: "My Feed"
+      #   url: "https://example.com/feed.xml"
+
+# 推送设置
+notification:
+  enabled: true
+  time: "09:00"
+  method: system  # system, slack, email
+
+# 可选：Slack 配置
+# slack:
+#   webhook_url: "https://hooks.slack.com/services/xxx"
+
+# 可选：邮件配置
+# email:
+#   smtp_server: "smtp.gmail.com"
+#   smtp_port: 587
+#   username: "your@email.com"
+#   password: "your_app_password"
+#   to: "recipient@email.com"
