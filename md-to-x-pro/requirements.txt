@@ -1,0 +1,16 @@
+# Document to Beautiful HTML Skill 依赖
+# 安装命令: pip install -r requirements.txt
+
+# 文档解析
+docling>=2.0.0
+python-docx>=1.2.0
+
+# API 调用
+requests>=2.31.0
+
+# 工具库
+python-dotenv>=1.0.0  # 可选，用于环境变量管理
+
+# 可选依赖
+# Pillow>=10.0.0  # 图片处理（如需高级图片操作）
+# markdown>=3.5.0  # Markdown渲染（如需高级MD功能）
