@@ -1,0 +1,44 @@
+# API Keys and Secrets
+.env
+*.key
+*_api_key.py
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Audio files
+*.mp3
+*.wav
+*.m4a
+*.mp4
+
+# Output files
+*_summary.txt
+*_summary.md
+*_summary.html
+*_converted.wav
+
+# Cache
+.meeting-summarizer/
+*.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+*:Zone.Identifier
+
+# Test files
+test_*.py

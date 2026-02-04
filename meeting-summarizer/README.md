@@ -1,241 +1,157 @@
 # Meeting Summarizer
 
-自动监控会议录音文件，使用 Whisper 转录并通过 Claude 生成结构化摘要，发送到 Slack。
+会议录音 → AI 转录 + 分析 → 3 种格式输出（TXT + MD + HTML）
 
-**🚀 [快速开始 - 30 分钟上线](QUICKSTART.md)**
+---
 
-## 功能特性
+## 🔧 技术栈
 
-- **自动监控**: 监控 `~/meeting-recordings` 文件夹中的新 mp3 文件
-- **智能转录**: 使用 OpenAI Whisper API 进行高质量语音转文字
-- **AI 分析**: 使用 Claude API 生成结构化会议摘要
-- **即时通知**: 自动发送结果到 Slack
-- **成本优化**:
-  - 文件哈希去重，避免重复处理
-  - 转录结果缓存
-  - 支持批量处理模式
+| 组件 | 技术 |
+|------|------|
+| **语音转录** | AssemblyAI API (universal-2 模型) |
+| **AI 分析** | Claude Sonnet 4.5 |
+| **输出格式** | Plain Text + Markdown + HTML |
+| **语言** | Python 3 |
 
-## 快速开始
+---
+
+## 📥 输入
+
+**支持格式**: mp3, wav, m4a, mp4
+
+**示例**:
+```
+meeting.mp3
+```
+
+---
+
+## 📤 输出
+
+生成 3 个文件（同目录）：
+
+| 文件 | 格式 | 特点 |
+|------|------|------|
+| `meeting_summary.txt` | 纯文本 | 基础摘要 |
+| `meeting_summary.md` | Markdown | AI 优化，带表格/列表/优先级 |
+| `meeting_summary.html` | HTML | 纽约客风格，精美排版 |
+
+**内容包含**:
+- 会议摘要
+- 关键决策点
+- 行动项（负责人 + 截止日期）
+- 说话人识别
+
+---
+
+## 🚀 快速开始
 
 ### 1. 安装依赖
 
 ```bash
-cd meeting-summarizer
-pip install -r requirements.txt
+pip install requests
 ```
 
-### 2. 初始化配置
+### 2. 配置 API Keys
 
 ```bash
-python scripts/init_config.py
+# 复制配置模板
+cp .env.example .env
+
+# 编辑 .env 文件，填入你的 API keys
+# 或者设置环境变量：
+export ASSEMBLYAI_API_KEY='your_api_key'
+export ANTHROPIC_AUTH_TOKEN='your_claude_token'
 ```
 
-这会在 `~/.meeting-summarizer/config.yaml` 创建配置文件。
+**获取 API Keys**:
+- AssemblyAI: https://www.assemblyai.com/dashboard/signup (免费 $50 额度)
+- Claude API: https://console.anthropic.com/
 
-### 3. 配置 API 密钥
-
-编辑 `~/.meeting-summarizer/config.yaml`，填入你的 API 密钥：
-
-```yaml
-openai:
-  api_key: "sk-..."
-
-anthropic:
-  api_key: "sk-ant-..."
-
-slack:
-  webhook_url: "https://hooks.slack.com/services/..."
-
-monitoring:
-  folder: "~/meeting-recordings"
-  check_interval: 60
-
-processing:
-  cache_transcripts: true
-  cache_dir: "~/.meeting-summarizer/cache"
-```
-
-或者使用环境变量：
+### 3. 运行
 
 ```bash
-export OPENAI_API_KEY='sk-...'
-export ANTHROPIC_API_KEY='sk-ant-...'
-export SLACK_WEBHOOK_URL='https://hooks.slack.com/services/...'
+# 生成 3 种格式（推荐）
+python assemblyai_enhanced.py "/path/to/meeting.mp3"
+
+# 或只生成基础文本
+python assemblyai_summarizer.py "/path/to/meeting.mp3"
 ```
 
-### 4. 启动监控
+---
+
+## 📋 启用方式
+
+### 方法 1: Claude Code Skill
 
 ```bash
-python scripts/monitor_meetings.py
+/meeting-summarizer "/path/to/meeting.mp3"
 ```
 
-系统会自动监控 `~/meeting-recordings` 文件夹，处理新的 mp3 文件。
-
-## 使用方式
-
-### 自动监控模式
+### 方法 2: 直接运行脚本
 
 ```bash
-python scripts/monitor_meetings.py
+python assemblyai_enhanced.py "/path/to/meeting.mp3"
 ```
 
-将 mp3 文件放入 `~/meeting-recordings` 文件夹，系统会自动处理。
+---
 
-### 手动处理单个文件
+## 💰 成本
+
+- **转录**: $0.25/小时 (AssemblyAI)
+- **分析**: $0.03/小时 (Claude)
+- **总计**: ~$0.28/会议
+
+---
+
+## ✅ 验证安装
 
 ```bash
-python scripts/process_meeting.py /path/to/meeting.mp3
+python verify_assemblyai_setup.py
 ```
 
-## 输出格式
+---
 
-系统会生成以下内容：
+## 📊 示例输出
 
-### 1. 会议摘要
-2-3 段话概括会议的主要内容和讨论重点
+**输入**: 1 小时会议录音
+**处理时间**: 2-3 分钟
+**输出**:
+- ✓ 转录准确率: 87%+
+- ✓ 自动识别说话人
+- ✓ 智能标点和格式化
+- ✓ 3 种格式文件
 
-### 2. 关键决策点
-列出会议中做出的重要决策
+---
 
-### 3. 行动项
-包含以下信息：
-- 行动项描述
-- 负责人
-- 截止日期
-
-## 成本控制
-
-### 转录成本（Whisper API）
-- 价格: $0.006 / 分钟
-- 1 小时会议 ≈ $0.36
-
-### 分析成本（Claude API）
-- Claude Sonnet 4.5: $3 / MTok (输入), $15 / MTok (输出)
-- 1 小时转录约 10K tokens
-- 单次分析 ≈ $0.03-0.05
-
-### 优化策略
-1. **缓存转录结果**: 避免重复转录同一文件
-2. **文件哈希检查**: 自动识别已处理文件
-3. **批量处理**: 可以关闭实时监控，定期批量处理
-
-## 目录结构
+## 📁 文件结构
 
 ```
 meeting-summarizer/
-├── SKILL.md                    # Skill 定义
-├── README.md                   # 使用说明
-├── requirements.txt            # 依赖包
-├── meeting_summarizer/         # 核心模块
-│   ├── __init__.py
-│   ├── transcriber.py         # Whisper 转录
-│   ├── analyzer.py            # Claude 分析
-│   ├── notifier.py            # Slack 通知
-│   ├── monitor.py             # 文件监控
-│   └── processor.py           # 主处理流程
-└── scripts/                    # 可执行脚本
-    ├── init_config.py         # 初始化配置
-    ├── process_meeting.py     # 处理单个文件
-    └── monitor_meetings.py    # 监控模式
+├── assemblyai_enhanced.py      # 主脚本（推荐）
+├── assemblyai_summarizer.py    # 基础版
+├── verify_assemblyai_setup.py  # 验证工具
+├── .env.example                 # 配置模板
+├── SKILL.md                     # Skill 定义
+└── README.md                    # 本文档
 ```
 
-## 配置说明
+---
 
-### config.yaml
+## 🔒 安全提示
 
-```yaml
-# OpenAI API 配置
-openai:
-  api_key: "your-openai-api-key"
+- ⚠️ **不要**将 API keys 提交到 git
+- ✅ 使用环境变量或 `.env` 文件
+- ✅ 将 `.env` 添加到 `.gitignore`
 
-# Anthropic API 配置
-anthropic:
-  api_key: "your-anthropic-api-key"
+---
 
-# Slack 配置
-slack:
-  webhook_url: "your-slack-webhook-url"
+## 📚 更多文档
 
-# 监控配置
-monitoring:
-  folder: "~/meeting-recordings"  # 监控文件夹
-  check_interval: 60              # 检查间隔（秒）
+- [AssemblyAI 注册指南](ASSEMBLYAI_SETUP.md)
+- [Vosk 离线方案](VOSK_QUICK_START.md)
+- [完整自动化指南](COMPLETE_AUTOMATION_GUIDE.md)
 
-# 处理配置
-processing:
-  cache_transcripts: true                    # 是否缓存转录结果
-  cache_dir: "~/.meeting-summarizer/cache"  # 缓存目录
-```
+---
 
-## 获取 API 密钥
-
-### OpenAI API Key
-1. 访问 https://platform.openai.com/api-keys
-2. 创建新的 API key
-3. 确保账户有余额
-
-### Anthropic API Key
-1. 访问 https://console.anthropic.com/
-2. 创建新的 API key
-3. 确保账户有余额
-
-### Slack Webhook URL
-1. 访问 https://api.slack.com/apps
-2. 创建新应用或选择现有应用
-3. 启用 Incoming Webhooks
-4. 添加新的 Webhook 到工作区
-5. 复制 Webhook URL
-
-## 故障排查
-
-### 问题: 转录失败
-- 检查 OpenAI API key 是否正确
-- 确认账户有余额
-- 检查音频文件格式（支持 mp3, mp4, wav, m4a 等）
-
-### 问题: 分析失败
-- 检查 Anthropic API key 是否正确
-- 确认账户有余额
-- 检查转录文本是否过长（Claude 有 token 限制）
-
-### 问题: Slack 通知失败
-- 检查 Webhook URL 是否正确
-- 确认 Webhook 未被禁用
-- 检查网络连接
-
-## 高级用法
-
-### 自定义分析提示词
-
-编辑 `meeting_summarizer/analyzer.py` 中的 `_build_prompt` 方法，自定义分析提示词。
-
-### 支持其他音频格式
-
-Whisper API 支持多种格式：mp3, mp4, mpeg, mpga, m4a, wav, webm
-
-### 批量处理历史文件
-
-```python
-from pathlib import Path
-from meeting_summarizer.processor import MeetingProcessor
-import yaml
-
-# Load config
-with open(Path.home() / '.meeting-summarizer' / 'config.yaml') as f:
-    config = yaml.safe_load(f)
-
-# Create processor
-processor = MeetingProcessor(config)
-
-# Process all mp3 files
-for file in Path('~/meeting-recordings').expanduser().glob('*.mp3'):
-    processor.process(str(file))
-```
-
-## 许可证
-
-MIT License
-
-## 贡献
-
-欢迎提交 Issue 和 Pull Request！
+**快速开始**: `python assemblyai_enhanced.py meeting.mp3` 🚀

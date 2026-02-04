@@ -5,14 +5,18 @@ from anthropic import Anthropic
 
 
 class MeetingAnalyzer:
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str, base_url: str = None):
         """
         Initialize analyzer with Anthropic API key
 
         Args:
             api_key: Anthropic API key
+            base_url: Custom API base URL (optional, for relay services)
         """
-        self.client = Anthropic(api_key=api_key)
+        if base_url:
+            self.client = Anthropic(api_key=api_key, base_url=base_url)
+        else:
+            self.client = Anthropic(api_key=api_key)
 
     def analyze(self, transcript: str, meeting_metadata: dict = None) -> dict:
         """

@@ -9,15 +9,19 @@ from openai import OpenAI
 
 
 class Transcriber:
-    def __init__(self, api_key: str, cache_dir: str = None):
+    def __init__(self, api_key: str, cache_dir: str = None, base_url: str = None):
         """
         Initialize transcriber with OpenAI API key
 
         Args:
             api_key: OpenAI API key
             cache_dir: Directory to cache transcripts (optional)
+            base_url: Custom API base URL (optional, for relay services)
         """
-        self.client = OpenAI(api_key=api_key)
+        if base_url:
+            self.client = OpenAI(api_key=api_key, base_url=base_url)
+        else:
+            self.client = OpenAI(api_key=api_key)
         self.cache_dir = Path(cache_dir) if cache_dir else None
 
         if self.cache_dir:
@@ -86,14 +90,37 @@ class Transcriber:
                 response_format="verbose_json"
             )
 
-        result = {
-            "text": transcript.text,
-            "metadata": {
-                "language": transcript.language,
-                "duration": transcript.duration,
-                "file": os.path.basename(audio_file_path)
+        # Handle different response formats (official API vs relay)
+        if isinstance(transcript, str):
+            # Relay might return string directly
+            result = {
+                "text": transcript,
+                "metadata": {
+                    "language": "unknown",
+                    "duration": 0,
+                    "file": os.path.basename(audio_file_path)
+                }
             }
-        }
+        elif hasattr(transcript, 'text'):
+            # Official API returns object with attributes
+            result = {
+                "text": transcript.text,
+                "metadata": {
+                    "language": getattr(transcript, 'language', 'unknown'),
+                    "duration": getattr(transcript, 'duration', 0),
+                    "file": os.path.basename(audio_file_path)
+                }
+            }
+        else:
+            # Fallback: try to parse as dict
+            result = {
+                "text": transcript.get('text', str(transcript)),
+                "metadata": {
+                    "language": transcript.get('language', 'unknown'),
+                    "duration": transcript.get('duration', 0),
+                    "file": os.path.basename(audio_file_path)
+                }
+            }
 
         # Save to cache
         self._save_to_cache(audio_file_path, result)
