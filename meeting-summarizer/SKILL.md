@@ -23,9 +23,11 @@ Use this skill when you need to:
 
 | Model | Accuracy | Cost | Deployment | Speaker ID | Best For |
 |-------|----------|------|------------|------------|----------|
-| **AssemblyAI** | 87%+ | $0.25/hr | Cloud | ✓ | Quick setup, reliable |
+| **AssemblyAI** | 87%+ | $0.25/hr | Cloud | ✓ | Quick setup, no local install, consistent |
 | **SenseVoice** | 95%+ | Free | Local | ✗ | Highest accuracy, 50+ languages |
 | **Paraformer** | 94%+ | Free | Local | ✓ | Free + speaker ID |
+
+**Note**: Local models offer higher accuracy but require ~1-2 GB download (5-15 min) and 4GB+ RAM. AssemblyAI trades accuracy for zero setup and cloud reliability.
 
 ## Usage
 
@@ -73,7 +75,10 @@ Get API key: https://www.assemblyai.com/dashboard/signup
 pip install funasr modelscope torch torchaudio
 ```
 
-First run downloads models (~1-2 GB). See MULTI_MODEL_GUIDE.md for details.
+**Requirements**: 4GB+ RAM, 2GB disk space for models
+**First run**: Downloads models (~1-2 GB, 5-15 min depending on connection)
+
+See MULTI_MODEL_GUIDE.md for details.
 
 ### Option 3: All Models
 
@@ -106,8 +111,9 @@ Example:
 |---------|-----|
 | "Model not found" error | Run `pip install funasr modelscope` for local models |
 | "API key not set" | Set `ASSEMBLYAI_API_KEY` environment variable |
-| Slow first run | Normal - downloading models (~1-2 GB) |
+| Slow first run | Normal - downloading models (~1-2 GB, 5-15 min) |
 | No speaker labels | Use AssemblyAI or Paraformer (SenseVoice doesn't support) |
+| Out of memory | Local models need 4GB+ RAM; use AssemblyAI if limited |
 
 ## Choosing a Model
 
