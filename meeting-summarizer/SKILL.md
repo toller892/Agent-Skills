@@ -1,75 +1,94 @@
 ---
 name: meeting-transcriber
-description: Use when you need to transcribe meeting recordings or audio files with speaker identification. Supports both free local models (SenseVoice, Paraformer) and paid cloud API (AssemblyAI). Choose based on accuracy needs, cost constraints, and offline requirements.
+description: Use when you need to transcribe meeting recordings or audio files with speaker identification. Supports Gemini (cloud, recommended) and Paraformer (local, offline). Auto-selects Gemini if API key is set, otherwise falls back to Paraformer. When used in Claude Code, AI summaries are automatically generated.
 ---
 
 # Meeting Transcriber
 
-Transcribe audio files with automatic speaker identification, outputting Markdown transcripts with timestamps.
+Transcribe audio files with automatic speaker identification, outputting Markdown transcripts with timestamps. When used as a Claude Code skill, AI summaries are automatically generated.
 
 ## When to Use
 
 Use this skill when you need to:
 - Transcribe meeting recordings (mp3, wav, m4a, mp4)
 - Identify different speakers automatically
-- Generate timestamped transcripts
-- Choose between free local models or paid cloud API
+- Generate timestamped transcripts with AI summaries
+- Automatic model selection: Gemini (if API key set) or Paraformer (fallback)
 
 **When NOT to use:**
-- If you need meeting summaries or analysis (this only transcribes)
 - For real-time streaming transcription (this processes files)
 
 ## Quick Reference
 
-| Model | Accuracy | Cost | Deployment | Speaker ID | Best For |
-|-------|----------|------|------------|------------|----------|
-| **AssemblyAI** | 87%+ | $0.25/hr | Cloud | ✓ | Quick setup, no local install, consistent |
-| **SenseVoice** | 95%+ | Free | Local | ✗ | Highest accuracy, 50+ languages |
-| **Paraformer** | 94%+ | Free | Local | ✓ | Free + speaker ID |
+| Model | Accuracy | Cost | Deployment | Speaker ID | Speed | Best For |
+|-------|----------|------|------------|------------|-------|----------|
+| **Gemini 2.5** ⭐ | 90% | Free quota | Cloud | ✓ | ~10-30s | **Default**: Fast, zero setup |
+| **Paraformer** | 94% | Free | Local | ✓ | ~3min | Offline, highest precision |
 
-**Note**: Local models offer higher accuracy but require ~1-2 GB download (5-15 min) and 4GB+ RAM. AssemblyAI trades accuracy for zero setup and cloud reliability.
+**Auto-selection logic:**
+- If `GEMINI_API_KEY` is set → Use Gemini (fast, zero setup)
+- If no API key → Automatically fall back to Paraformer (free, offline)
 
-## Usage
+## Usage in Claude Code (Recommended)
 
-### Interactive Mode (Recommended)
+When using this skill in Claude Code, the workflow is:
 
-```bash
-cd ~/.claude/skills/meeting-summarizer
-python transcribe_multi_model.py "/path/to/meeting.mp3"
-```
-
-You'll see a menu to select your model:
-```
-[1] AssemblyAI - Cloud API, 87%+, $0.25/hr
-[2] SenseVoice - Local, 95%+, free, 50+ languages
-[3] Paraformer - Local, 94%+, free, speaker ID
-```
-
-### Direct Model Selection
+1. **Transcribe**: Run the transcription script to generate timestamped transcript
+2. **Summarize**: Claude automatically reads the transcript and generates AI summary
+3. **No extra API keys needed**: Claude handles the AI summary generation directly
 
 ```bash
-# Use AssemblyAI (cloud)
-python transcribe_multi_model.py meeting.mp3 1
+# Auto-select model (Gemini if key set, otherwise Paraformer)
+python transcribe_only.py "/path/to/meeting.mp3"
 
-# Use SenseVoice (local, highest accuracy)
-python transcribe_multi_model.py meeting.mp3 2
+# Manually specify Gemini
+export GEMINI_API_KEY='your_api_key'
+python transcribe_only.py "/path/to/meeting.mp3" 1
 
-# Use Paraformer (local, speaker ID)
-python transcribe_multi_model.py meeting.mp3 3
+# Manually specify Paraformer (offline)
+python transcribe_only.py "/path/to/meeting.mp3" 2
 ```
+
+**Model Selection Menu:**
+```
+[1] Gemini - Cloud API, 90%+, free quota, fastest ⭐
+[2] Paraformer - Local, 94%+, free, speaker ID, offline
+```
+
+After transcription completes, Claude will:
+- Read the generated transcript
+- Generate a comprehensive AI summary including:
+  - Overall meeting summary
+  - Key points
+  - Speaker-by-speaker breakdown
+  - Action items
+- Add the summary to the transcript file
+
+**Benefits:**
+- No external AI API keys required for summary generation
+- No additional API costs for AI summaries
+- Seamless integration with Claude Code workflow
 
 ## Setup
 
-### Option 1: AssemblyAI Only (Fastest)
+### Option 1: Gemini (Recommended - Auto-selected if key is set)
 
 ```bash
-pip install requests
-export ASSEMBLYAI_API_KEY='your_api_key'
+# Set API key (optional - will auto-fallback to Paraformer if not set)
+export GEMINI_API_KEY='your_api_key'
 ```
 
-Get API key: https://www.assemblyai.com/dashboard/signup
+Get free API key: https://aistudio.google.com/app/apikey
 
-### Option 2: Local Models (Free)
+**Advantages:**
+- ✅ Zero installation, works immediately
+- ✅ Fastest transcription (~10-30 seconds)
+- ✅ Good speaker identification (126 segments)
+- ✅ Supports 100+ languages
+- ⚠️ Requires internet connection
+- ⚠️ Free quota limited
+
+### Option 2: Paraformer (Auto-fallback if no Gemini key)
 
 ```bash
 pip install funasr modelscope torch torchaudio
@@ -78,71 +97,133 @@ pip install funasr modelscope torch torchaudio
 **Requirements**: 4GB+ RAM, 2GB disk space for models
 **First run**: Downloads models (~1-2 GB, 5-15 min depending on connection)
 
-See MULTI_MODEL_GUIDE.md for details.
+**Advantages:**
+- ✅ Completely free, no quota limits
+- ✅ Works offline
+- ✅ Higher accuracy (94%)
+- ✅ Best speaker segmentation (179 segments)
+- ⚠️ Requires model download
+- ⚠️ Slower transcription (~3 minutes)
 
-### Option 3: All Models
+## Standalone Usage (Outside Claude Code)
 
 ```bash
-pip install requests funasr modelscope torch torchaudio
-export ASSEMBLYAI_API_KEY='your_api_key'  # optional
+cd ~/.claude/skills/meeting-summarizer
+
+# Auto-select (Gemini if key set, otherwise Paraformer)
+python transcribe_multi_model.py "/path/to/meeting.mp3"
+
+# Manually specify Gemini
+export GEMINI_API_KEY='your_api_key'
+python transcribe_multi_model.py "/path/to/meeting.mp3" 1
+
+# Manually specify Paraformer (offline)
+python transcribe_multi_model.py "/path/to/meeting.mp3" 2
+```
+
+You'll see a menu to select your model:
+```
+[1] Gemini - Cloud API, 90%+, free quota, fastest ⭐
+[2] Paraformer - Local, 94%+, free, speaker ID, offline
+```
+
+### Direct Model Selection
+
+```bash
+# Use Gemini (recommended - fastest)
+python transcribe_multi_model.py meeting.mp3 1
+
+# Use Paraformer (offline, best segmentation)
+python transcribe_multi_model.py meeting.mp3 2
 ```
 
 ## Output
 
 Generates Markdown file: `filename_transcript_[model].md`
 
-Format:
+**With AI Summary (in Claude Code):**
+- Meeting summary (overall, key points, speaker breakdown, action items)
 - File metadata (duration, accuracy, speaker count)
 - Timestamped segments by speaker
-- No summaries or analysis (transcription only)
 
-Example:
+**Without AI Summary (standalone):**
+- File metadata only
+- Timestamped segments by speaker
+
+Example output:
 ```markdown
-### [00:03] 说话人 A
-这个注意配置不要让它在任何一个会上都加...
+## 会议精要
 
-### [00:22] 说话人 B
-好的，诶卡个去这...
+### 整体总结
+本次会议是团队工作同步会议，讨论技术开发、配置调整和数据问题...
+
+### 关键要点
+1. 技术开发任务：hook web CTV 验证、API 增强...
+2. 配置调整：归因窗口期从 1 小时调整为 24 小时...
+
+### 发言人总结
+**说话人 1**: 主持会议开场
+**说话人 2**: 汇报技术任务清单...
+
+### 行动项
+- [ ] 调整配置并测试
+- [ ] 更新文档...
+
+---
+
+## 原始转录内容
+
+### [00:03] 说话人 1
+咱们开始吧...
+
+### [00:22] 说话人 2
+好的，第一个是...
 ```
 
 ## Common Mistakes
 
 | Mistake | Fix |
 |---------|-----|
-| "Model not found" error | Run `pip install funasr modelscope` for local models |
-| "API key not set" | Set `ASSEMBLYAI_API_KEY` environment variable |
-| Slow first run | Normal - downloading models (~1-2 GB, 5-15 min) |
-| No speaker labels | Use AssemblyAI or Paraformer (SenseVoice doesn't support) |
-| Out of memory | Local models need 4GB+ RAM; use AssemblyAI if limited |
+| "GEMINI_API_KEY not set" | Normal - will auto-fallback to Paraformer (free, offline) |
+| "Quota exceeded" | Wait for quota reset or manually use Paraformer: `python transcribe_only.py meeting.mp3 2` |
+| "Model not found" error | Run `pip install funasr modelscope` for Paraformer |
+| Slow first run (Paraformer) | Normal - downloading models (~1-2 GB, 5-15 min) |
+| No speaker labels | Both Gemini and Paraformer support speaker ID |
+| Out of memory (Paraformer) | Paraformer needs 4GB+ RAM; use Gemini if limited |
 
 ## Choosing a Model
 
 ```dot
 digraph model_selection {
-    "Need speaker ID?" [shape=diamond];
-    "Have budget?" [shape=diamond];
-    "Need offline?" [shape=diamond];
+    "Have Gemini API key?" [shape=diamond];
+    "Use Gemini" [shape=box, style=filled, fillcolor=lightblue];
     "Use Paraformer" [shape=box, style=filled, fillcolor=lightgreen];
-    "Use AssemblyAI" [shape=box, style=filled, fillcolor=lightblue];
-    "Use SenseVoice" [shape=box, style=filled, fillcolor=lightyellow];
 
-    "Need speaker ID?" -> "Have budget?" [label="yes"];
-    "Need speaker ID?" -> "Need offline?" [label="no"];
-    "Have budget?" -> "Use AssemblyAI" [label="yes"];
-    "Have budget?" -> "Use Paraformer" [label="no"];
-    "Need offline?" -> "Use SenseVoice" [label="yes"];
-    "Need offline?" -> "Use AssemblyAI" [label="no"];
+    "Have Gemini API key?" -> "Use Gemini" [label="yes (auto-selected)"];
+    "Have Gemini API key?" -> "Use Paraformer" [label="no (auto-fallback)"];
 }
 ```
 
 **Quick decision:**
-- **Free + Speaker ID** → Paraformer
-- **Highest accuracy** → SenseVoice
-- **Quick setup** → AssemblyAI
+- **Default** → Gemini (fastest, zero setup, good speaker ID) ⭐
+- **No API key / Offline** → Paraformer (free, best speaker segmentation, auto-fallback)
 
 ## Real-World Impact
 
-- Transcribes 1-hour meeting in ~3-5 minutes (cloud) or ~10-15 minutes (local)
-- 87-95% accuracy depending on model
-- Automatic speaker identification saves manual labeling time
-- Free local options eliminate ongoing costs
+**Gemini (Recommended):**
+- Transcribes 9-min meeting in ~10-30 seconds
+- 126 speaker segments, 90% accuracy
+- Zero setup, works immediately
+- Free quota: sufficient for regular use
+
+**Paraformer (Offline):**
+- Transcribes 9-min meeting in ~3 minutes
+- 179 speaker segments (most precise), 94% accuracy
+- Completely free, no quota limits
+- Works offline
+
+**Comparison:**
+- Speed: Gemini 6-18x faster than Paraformer
+- Segmentation: Paraformer 42% more segments (179 vs 126)
+- Setup: Gemini instant, Paraformer needs 1-2GB download
+- Cost: Both free (Gemini has quota, Paraformer unlimited)

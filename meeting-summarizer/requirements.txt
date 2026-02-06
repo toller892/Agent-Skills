@@ -1,5 +1,11 @@
-openai>=1.0.0
-anthropic>=0.18.0
-watchdog>=3.0.0
+# 基础依赖（必需）
 requests>=2.31.0
-pyyaml>=6.0
+
+# Gemini API 依赖（推荐，云端转录）
+google-generativeai>=0.3.0
+
+# Paraformer 本地模型依赖（可选，离线转录）
+# funasr>=1.0.0
+# modelscope>=1.9.0
+# torch>=2.0.0
+# torchaudio>=2.0.0
