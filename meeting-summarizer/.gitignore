@@ -1,8 +1,3 @@
-# API Keys and Secrets
-.env
-*.key
-*_api_key.py
-
 # Python
 __pycache__/
 *.py[cod]
@@ -13,21 +8,20 @@ venv/
 env/
 ENV/
 
-# Audio files
-*.mp3
-*.wav
-*.m4a
-*.mp4
+# 输出文件
+transcripts_output/
+*.md.backup
+*_transcript_*.md
+*_transcript_*.txt
 
-# Output files
-*_summary.txt
-*_summary.md
-*_summary.html
-*_converted.wav
+# 配置文件
+.env
+config.yaml
+*.log
 
-# Cache
-.meeting-summarizer/
-*.json
+# 测试文件
+test_*.txt
+test_output/
 
 # IDE
 .vscode/
@@ -38,7 +32,7 @@ ENV/
 # OS
 .DS_Store
 Thumbs.db
-*:Zone.Identifier
 
-# Test files
-test_*.py
+# 临时文件
+*.tmp
+*.temp
