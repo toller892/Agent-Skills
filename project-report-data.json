@@ -1,0 +1,120 @@
+{
+  "title": "Agent Skills 项目分析报告",
+  "subtitle": "OpenCode Agent Skills 集合项目",
+  "author": "OpenCode Agent",
+  "summary": "本项目是一个 OpenCode Agent Skills 集合，包含可复用的 AI 能力模块。目前包含 typst-report 和 paper-interpreter 两个核心技能，分别用于专业 PDF 报告生成和论文解读与可视化。",
+  "metrics": [
+    {
+      "label": "技能数量",
+      "value": "2",
+      "change": 0.0
+    },
+    {
+      "label": "Typst代码行数",
+      "value": "1,340",
+      "change": 0.0
+    },
+    {
+      "label": "Python代码行数",
+      "value": "1,135",
+      "change": 0.0
+    },
+    {
+      "label": "文档行数",
+      "value": "2,816",
+      "change": 0.0
+    }
+  ],
+  "sections": [
+    {
+      "heading": "项目概述",
+      "level": 2,
+      "type": "text",
+      "content": "Agent Skills 项目是一个 OpenCode Agent 技能集合，旨在提供可复用的 AI 能力模块。每个技能都遵循统一的开发规范，包含完整的文档、脚本和示例。"
+    },
+    {
+      "heading": "核心技能",
+      "level": 2,
+      "type": "list",
+      "items": [
+        "typst-report: 使用 Typst 排版系统生成专业 PDF 报告",
+        "paper-interpreter: 论文→黄叔风格解读+纽约客插画+2026设计网页"
+      ]
+    },
+    {
+      "heading": "Typst Report Skill 详情",
+      "level": 2,
+      "type": "text",
+      "content": "typst-report 技能使用 Typst 排版系统生成专业 PDF 报告，支持从 JSON/CSV 数据生成报告，包含图表、表格、KPI 卡片等组件，并支持中文排版。"
+    },
+    {
+      "heading": "Typst 模板结构",
+      "level": 3,
+      "type": "table",
+      "headers": ["模块", "代码行数", "功能描述"],
+      "data": [
+        ["main.typ", "145", "报告生成入口文件，数据加载和路由"],
+        ["business.typ", "377", "商业报告模板，包含封面、目录、样式"],
+        ["theme.typ", "314", "全局样式定义，字体、颜色、间距"],
+        ["utils.typ", "219", "数据处理工具函数，JSON解析等"],
+        ["charts.typ", "285", "图表组件，折线图、柱状图等"]
+      ]
+    },
+    {
+      "heading": "Paper Interpreter Skill 详情",
+      "level": 2,
+      "type": "text",
+      "content": "paper-interpreter 技能实现五阶段工作流：1) 信息获取，2) 黄叔风格文章生成，3) 纽约客风格配图生成，4) 2026设计HTML生成，5) PDF生成。"
+    },
+    {
+      "heading": "五阶段工作流",
+      "level": 3,
+      "type": "checklist",
+      "items": [
+        "阶段1: 信息获取 - 下载PDF，提取arXiv ID",
+        "阶段2: 文章生成 - 黄叔风格，类比密度≥1个/400字",
+        "阶段3: 配图生成 - 纽约客风格，3-4色muted配色",
+        "阶段4: HTML生成 - 2026设计，Intersection Observer动画",
+        "阶段5: PDF生成 - fpdf2，中文字体支持"
+      ]
+    },
+    {
+      "heading": "项目文件统计",
+      "level": 2,
+      "type": "chart",
+      "chart_type": "bar",
+      "data": [
+        {"label": "Typst代码", "value": 1340},
+        {"label": "Python代码", "value": 1135},
+        {"label": "文档", "value": 2816}
+      ]
+    },
+    {
+      "heading": "开发规范",
+      "level": 2,
+      "type": "text",
+      "content": "每个技能都遵循统一的开发规范：必须包含 SKILL.md 定义文件、README.md 使用说明，可选包含 scripts/ 可执行脚本和 references/ 参考文档。"
+    },
+    {
+      "heading": "使用方式",
+      "level": 2,
+      "type": "list",
+      "items": [
+        "在 GitHub Issue/PR 中评论: /oc 生成一份测试报告",
+        "本地测试: typst compile --input payload='{...}' main.typ output.pdf",
+        "直接对 AI Agent 说: 解析这篇论文: https://arxiv.org/pdf/2301.12345.pdf"
+      ]
+    }
+  ],
+  "code_blocks": [
+    {
+      "language": "typst",
+      "code": "// 从 CLI 输入解析 JSON 数据\n#let payload = parse-payload()\n\n// 提取报告元数据\n#let report-title = safe-get(payload, \"title\", default: \"自动化报告\")\n#let report-subtitle = safe-get(payload, \"subtitle\", default: none)\n#let report-author = safe-get(payload, \"author\", default: \"System\")"
+    },
+    {
+      "language": "python",
+      "code": "# paper-interpreter 核心工作流\ndef process_paper(arxiv_url):\n    # 阶段1: 信息获取\n    pdf_path = download_pdf(arxiv_url)\n    arxiv_id = extract_arxiv_id(arxiv_url)\n    \n    # 阶段2: 黄叔风格文章生成\n    article = generate_article(pdf_path, style=\"huangshu\")\n    \n    # 阶段3: 纽约客风格配图生成\n    illustrations = generate_illustrations(article, style=\"newyorker\")\n    \n    # 阶段4: HTML生成\n    html_content = generate_html(article, illustrations)\n    \n    # 阶段5: PDF生成\n    pdf_path = generate_pdf(html_content, arxiv_id)\n    \n    return pdf_path"
+    }
+  ],
+  "appendix": "本报告基于 Agent Skills 项目内容自动生成，展示了 typst-report 技能的实际应用效果。项目持续开发中，欢迎贡献新的技能模块。"
+}
